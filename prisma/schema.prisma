@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TreeStructure {
+  id             Int       @id @default(autoincrement())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  name           String?
+  parentId       Int?
+  childrenIds    Int[]
+  materials      Material[]
+}
+
+model Material {
+  id                 Int       @id @default(autoincrement())
+  name               String?
+  code               String?
+  groupId            Int?
+  sourceChannel      Int?
+  type               Int?
+  templateUrl        String?
+  templateFileId     Int?
+  templateFileName   String?
+  demoFileId         Int?
+  demoFileName       String?
+  demoUrl            String?
+  demoDescription    String?
+  templateCusContent String?
+  legalSizeLimit     String?
+  legalFormats       String?
+  legalPageSize      Int?
+  legalIsShare       Int?
+  treeStructureId    Int       @map("tree_structure_id")
+  treeStructure      TreeStructure @relation(fields: [treeStructureId], references: [id])
+}
+
